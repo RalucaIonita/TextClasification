@@ -1,3 +1,5 @@
+from test import section_data_indexes
+
 # import stuff
 import numpy as np
 import re
@@ -6,7 +8,7 @@ import os
 from collections import defaultdict
 from sklearn import svm
 
-words_number = 2000
+words_number = 3000
 
 
 # accuracy
@@ -39,7 +41,7 @@ def read_texts(path):
 		with open(file, 'r', encoding = 'utf-8') as file_in:
 			text = file_in.read()
 #			text = text.lower() # to lower case
-		text_without_punctuation = re.sub("[.,-:;!?\"\'\/()_*=`]", "", text)
+		text_without_punctuation = re.sub("[.,-:;!?\"\'\/()_*=`]", " ", text)
 		words = text_without_punctuation.split()
 		text_data.append(words)
 	return (text_index, text_data)
@@ -55,9 +57,9 @@ test_data_path = data_path + 'test/'
 # reading the data
 labels = np.loadtxt(labels_path)
 training_index, train = read_texts(training_data_path)
-testing_index, test = read_texts(test_data_path)
+testing_indexes, test = read_texts(test_data_path)
 
-data = train + test
+data = train
 
 print('Train data: ', len(train))
 print('Test data: ', len(test))
@@ -116,41 +118,153 @@ data_bow = get_bow_on_data(data, list_of_selected_words)
 print('Data bow shape: ', data_bow.shape)
 
 
-# data size
-train_data_size = 2450
-validation_data_size = len(train) - train_data_size
-test_data_size = len(test)
-data_size = len(data)
+ti,vi1,vi2,vi3,vi4,vi5,vi6,vi7,vi8,vi9,tsi = section_data_indexes()
+###indexes
 
-print('Train data size: ', train_data_size)
-print('Validation data size: ', validation_data_size)
-print('Test data size: ', test_data_size)
-print('Data size: ', data_size)
 
-# data indexes
-train_indexes = np.arange(0, train_data_size)
-validation_indexes = np.arange(train_data_size, train_data_size + validation_data_size)
-test_indexes = np.arange(train_data_size + validation_data_size + 1, data_size+1)
 
-print(test_indexes)
 
-# SVM
+for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+	clasifier = svm.SVC(C = C, kernel = 'rbf', gamma = 'scale')
+	clasifier.fit(data_bow[ti, :], labels[ti])
+	predictions = clasifier.predict(data_bow[vi1, :])
+	print("First validation accuracy with C = ", C, " : ", accuracy(predictions, labels[vi1]))
+
+
+ti.extend(vi1)
+
 #for C in [0.001, 0.01, 0.1, 1, 10, 100]:
-clasifier = svm.SVC(C = 100, kernel = 'linear')
-clasifier.fit(data_bow[train_indexes, :], labels[train_indexes])
-predictions = clasifier.predict(data_bow[validation_indexes, :])
-print("Validation accuracy with C = 100 : ", accuracy(predictions, labels[validation_indexes]))
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi2, :])
+print("Second validation accuracy with C = 100 : ", accuracy(predictions, labels[vi2]))
+
+
+ti.extend(vi2)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi3, :])
+print("Third validation accuracy with C = 100 : ", accuracy(predictions, labels[vi3]))
 
 
 
+ti.extend(vi3)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi4, :])
+print("Fourth validation accuracy with C = 100 : ", accuracy(predictions, labels[vi4]))
+
+
+
+ti.extend(vi4)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi5, :])
+print("Fifth validation accuracy with C = 100 : ", accuracy(predictions, labels[vi5]))
+
+
+
+
+ti.extend(vi5)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi6, :])
+print("Sixth validation accuracy with C = 100 : ", accuracy(predictions, labels[vi6]))
+
+
+
+ti.extend(vi6)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi7, :])
+print("Seventh validation accuracy with C = 100 : ", accuracy(predictions, labels[vi7]))
+
+
+
+ti.extend(vi7)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi8, :])
+print("Eigth validation accuracy with C = 100 : ", accuracy(predictions, labels[vi8]))
+
+
+
+ti.extend(vi8)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[vi9, :])
+print("Ninth validation accuracy with C = 100 : ", accuracy(predictions, labels[vi9]))
+
+
+
+
+ti.extend(vi9)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[tsi, :])
+print("Test validation accuracy with C = 100 : ", accuracy(predictions, labels[tsi]))
+
+
+
+ti.extend(tsi)
+
+
+#for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+clasifier = svm.SVC(C = 100, kernel = 'rbf', gamma = 'scale')
+clasifier.fit(data_bow[ti, :], labels[ti])
+predictions = clasifier.predict(data_bow[tsi, :])
+print("Final test accuracy with C = ", C, " : ", accuracy(predictions, labels[tsi]))
+
+
+
+############# TEST
 test_bow = get_bow_on_data(test, list_of_selected_words)
 print('Test bow shape', test_bow.shape)
 
 predicted_labels = clasifier.predict(test_bow)
+test_indexes = []
+
+for index in testing_indexes:
+	test_indexes.append(int(index))
+
+
 '''
+for index in test_indexes:
+	print(index)
+'''
+
+
 for index, label in zip(test_indexes, predicted_labels):
 	print(index, label)
 
-file = "submisie_Kaggle_1.csv"
+
+
+file = "submisie_Kaggle_4.csv"
 np.savetxt(file, np.stack((test_indexes, predicted_labels)).T, fmt = "%d", delimiter=',', header = "Id,Prediction", comments = '')
-'''
+
+
+
